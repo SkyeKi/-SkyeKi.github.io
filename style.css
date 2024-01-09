@@ -2,36 +2,40 @@
 html, body {
   padding: 0 0 0 0;
   margin: 0;
-  font-family: 'helvetica', 'arial', 'sans';
+  font-family: Verdana, Tahoma, sans-serif, Times, serif, Courier, serif;
+  margin: 2%;
 }
 
 h1,h2,h3,h4 {
-  font-family: 'helvetica', 'arial', 'sans';
+  font-family: Verdana, Tahoma, sans-serif, Times, serif, Courier, serif;
   }
 
 
 a {
-  color: #000;
+  color: darkslategray;
 }
 
 .header {
-  background: #fff;
-  color: #000;
+  color: darkslategray;
   height: auto;
-  padding: 30px 30px 30px;
 }
 
 .header h1 {
   font-size: 50px;
+  padding: 20px 20px 20px 20px;
+  background: darkslategrey;
+  color: white;
   }
 
 .assignment {
   font-size: 12px;
   line-height: 24px;
-  font-family: 'helvetica', 'arial', 'sans';
-  padding: 20px 20px 20px 30px;
+  background-color: darkslategray;
+  color: white;
+  font-family: Verdana, Tahoma, sans-serif, Times, serif, Courier, serif;
+  padding: 20px 20px 20px 20px;
   width: 250px;
-  height: 350px;
+  height: 275px;
   overflow: hidden;
   float: left;
 }
@@ -39,13 +43,13 @@ a {
 .assignment:hover { overflow:auto }
 
 .assignment a {
-    color: #000;
+    color: white;
     text-decoration: none;
 }
 
 .assignment a:hover {
-  background: #F06;
-  color: #F06;
+  background: lightgray;
+  color: lightgray;
   text-decoration: none;
 }
 
