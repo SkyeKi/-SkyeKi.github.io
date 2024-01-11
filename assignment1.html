@@ -12,12 +12,51 @@
     <body> 
 
         <div class="header">
-            <h1>Example Student's Assignment 1!</h1>
+            <h1>Skye's Assignment 1: Blink</h1>
             <p>
-            <img src="red-panda.jpg" width=400></a>
+            <img src="IMG_0540.gif" width=400>
+            <img src="4f07hjn5.png" width=400></a>
             </p>
             <p>
-            Here is all the documentation for assignment 1!
+            <h3>Code:</h3>
+            <br>
+            void setup() { // start of the container of the pins I want to initialize <br>
+                <dd>pinMode(9, OUTPUT); // initializes digital pin 9 <br>
+                pinMode(8, OUTPUT); // initializes digital pin 8 <br>
+                pinMode(7, OUTPUT); // initializes digital pin 7 <br></dd>
+              } <br>
+              <br>
+              void loop() { // start of the container of the code I want to repeat <br>
+                <dd>digitalWrite(9, HIGH); //turns the red LED on <br>
+                delay(200); //waits 200 miliseconds for a quick blink effect <br>
+                digitalWrite(9, LOW); // turns the red LED off <br>
+                delay(200); //waits 200 miliseconds <br>
+                digitalWrite(8, HIGH); //turns the blue LED on <br>
+                delay(400); //waits 400 miliseconds for a medium long blink <br>
+                digitalWrite(8, LOW); // turns the blue LED off <br>
+                delay(400); //waits 400 miliseconds <br>
+                digitalWrite(7, HIGH); //turns the yellow LED on <br>
+                delay(600); //waits 600 miliseconds for a long blink effect <br>
+                digitalWrite(7, LOW); // turns the yellow LED off <br>
+                delay(600); //waits 600 miliseconds before looping <br></dd>
+              } <br>
+              <br> 
+              <h3>Questions: </h3>
+              <dd><br>
+              <h4>1: Draw a graph where the X axis is time and the Y axis is voltage across the LEDs. Draw a line for each of your 3 LEDs.</h4><br>
+              <img src="chart.jpeg" width=400>
+              <br>
+              <h4>2: How many LEDs could you blink independently with your Arduino? How much current would that draw?</h4><br>
+              <br>
+                14 LEDs could blink independently, one for each of the digital ports. The current would depend on what resistors are being used. However each LED would be experiencing idealy 20mA to be bright but still a good amount under the maximum rating DC forward current.<br>
+              <br>
+              <h4>3: How many LEDs could you blink with your Arduino if only one were to be on at once? (this question is not required!)</h4><br>
+              <br>
+              <h4>4: How fast do you need to blink your LEDs until you no longer can tell that they are blinking?</h4><br>
+              <br>
+                Around 14 to 4 miliseconds between being on, I didn't test it out due to lights rapidly flashing being potentialy triggering. But I estimate this based of of 60 frames per second being used for video and moniters refresh rates being up to 240hz.  
+              </dd>
+
             </p>
         </div>
         
