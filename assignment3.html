@@ -1,0 +1,128 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+        <title>Skye's HCDE 439 Physical Computing Page!</title> 
+
+        <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+    </head> 
+    <body> 
+
+        <div class="header">
+            <h1>Skye's Assignment 2: Fade</h1>
+            <p>
+            <img src="fadeBoard.jpg" width=400>
+            <img src="IMG_0580.gif" width=300>
+            <img src="schematic.jpg" width=700></a>
+            <br>The device allows the user to change the strength of each color in the mixed LED, and has independent LEDs to see the strenght of the individual parts. 
+            <br>The Blue LED has a higher voltage drop thus to have the same current in all LEDS the blue LED needs to be paired with a lower resistor of 100 compared to the 220. 10k resistors were used with the buttons to prevent short circuts<br>
+            </p>
+            <p>
+            <h3>Code:</h3>
+            <br>
+            const int ledOutputRed = 11; //sets a variable to the pin for red in the mixed LED<br>
+            const int ledOutputGreen = 10; //sets a variable to the pin for green in the mixed LED<br>
+            const int ledOutputBlue = 9; //sets a variable to the pin for blue in the mixed LED<br>
+            const int ledPinRed = 6; //sets a variable to the pin for the red LED<br>
+            const int ledPinGreen = 5; //sets a variable to the pin for the green LED<br>
+            const int ledPinBlue = 3; //sets a variable to the pin for the blue LED<br>
+            const int buttonPinRed = 2; //sets a variable to the pin sensing the button for red<br>
+            const int buttonPinGreen = 1;//sets a variable to the pin sensing the button for green<br>
+            const int buttonPinBlue = 7;//sets a variable to the pin sensing the button for blue<br>
+            int buttonStateRed = 0; // sets the red button state<br>
+            int buttonStateGreen = 0; // sets the red button state<br>
+            int buttonStateBlue = 0; // sets the red button state<br>
+            int ledRed = 0; // sets the red amount to 0<br>
+            int ledGreen = 0; // sets the green amount to 0<br>
+            int ledBlue = 0; // sets the blue amount to 0<br>
+            <br>
+            void setup() { // start of the container of the pins I want to initialize<br>
+            <dd>pinMode(ledPinRed, OUTPUT); // initializes digital pin 6<br>
+              pinMode(ledPinGreen, OUTPUT); // initializes digital pin 5<br>
+              pinMode(ledPinBlue, OUTPUT); // initializes digital pin 3<br>
+              pinMode(ledOutputRed, OUTPUT); // initializes digital pin 11<br>
+              pinMode(ledOutputGreen, OUTPUT); // initializes digital pin 10<br>
+              pinMode(ledOutputBlue, OUTPUT); // initializes digital pin 9<br>
+              pinMode(buttonPinRed, INPUT); // initializes digital pin 2<br>
+              pinMode(buttonPinGreen, INPUT); // initializes digital pin 1<br>
+              pinMode(buttonPinBlue, INPUT); // initializes digital pin 7<br></dd>
+            }<br>
+            <br>
+            void loop() { // start of the container of the code I want to repeat<br>
+              <br>
+              buttonStateRed = digitalRead(buttonPinRed); // detects if the red button is pressed<br>
+              buttonStateGreen = digitalRead(buttonPinGreen); // detects if the green button is pressed<br>
+              buttonStateBlue = digitalRead(buttonPinBlue); // detects if the blue button is pressed<br>
+              <br>
+              if (buttonStateRed == HIGH) { // if the red button is pressed the following code triggers<br>
+                if (ledRed == 100) { // if the amount of red is 100 the next 4 lines trigger<br>
+                    <dd>    digitalWrite(ledPinRed, LOW); //turns the red LED off<br>
+                    digitalWrite(ledOutputRed, LOW);//turns the red content in the LED off<br>
+                    delay(500); //waits half a sec or else the code breaks<br>
+                    ledRed = 0; //resets the red amount to 0<br></dd>
+                } <br>
+                else { // if the red amount is not 100 the next 5 lines trigger<br>
+                <dd>for (int i = 0; i < 25; i++) { // fades for 25 units<br>
+                    ledRed = ledRed + 1; // adds one to the red amount<br>
+                    analogWrite(ledPinRed, ledRed + i); // makes the red LED the red amount<br>
+                    analogWrite(ledOutputRed, ledRed + i); //makes the mixed LED the red amount<br>
+                    delay(20); //waits 20 miliseconds<br></dd>
+                  }<br>
+                }<br>
+              }<br>
+              <br>
+              if (buttonStateGreen == HIGH) { // if the green button is pressed the following code triggers<br>
+              if (ledGreen == 100) { // if the amount of green is 100 the next 4 lines trigger<br>
+                <dd>  digitalWrite(ledPinGreen, LOW); //turns the green LED off<br>
+                  digitalWrite(ledOutputGreen, LOW); //turns the green content in the LED off<br>
+                  delay(500); //waits half a sec or else the code breaks<br>
+                  ledGreen = 0; //resets the green amount to 0<br></dd>
+                } <br>
+                else { // if the green amount is not 100 the next 5 lines trigger<br>
+                <dd>for (int i = 0; i < 25; i++) { // fades for 25 units<br>
+                    ledGreen = ledGreen + 1; // adds one to the green amount<br>
+                    analogWrite(ledPinGreen, ledGreen); // makes the green LED the green amount<br>
+                    analogWrite(ledOutputGreen, ledGreen); //makes the mixed LED the green amount<br>
+                    delay(20); //waits 20 miliseconds<br></dd>
+                  }<br>
+                }<br>
+              }<br>
+              <br>
+              if (buttonStateBlue == HIGH) { // if the blue button is pressed the following code triggers<br>
+              if (ledBlue == 100) { // if the amount of blue is 100 the next 4 lines trigger<br>
+                <dd>digitalWrite(ledPinBlue, LOW); //turns the blue LED off<br>
+                    digitalWrite(ledOutputBlue, LOW); //turns the blue content in the LED off<br>
+                    delay(500); //waits half a sec or else the code breaks<br>
+                    ledBlue = 0; //resets the blue amount to 0<br></dd>
+                } <br>
+                else { // if the blue amount is not 100 the next 5 lines trigger<br>
+                <dd>for (int i = 0; i < 25; i++) { // fades 25 units<br>
+                    ledBlue = ledBlue + 1; // adds one to the blue amount<br>
+                    analogWrite(ledPinBlue, ledBlue); // makes the blue LED the blue amount<br>
+                    analogWrite(ledOutputBlue, ledBlue); //makes the mixed LED the blue amount<br>
+                    delay(25); //waits 20 miliseconds<br></dd>
+                  }<br>
+                }<br>
+              }<br>
+            }<br>
+            <br>
+
+              <h3>Questions: </h3>
+              <dd><br>
+              <h4>1: Draw a chart where the X axis is time and the Y axis is voltage. Draw 3 lines representing the voltage across an LED with analogWrite(led, 64), analogWrite(led, 128), and analogWrite(led,255).</h4><br>
+              <img src="FadeQ1.jpg" width=400>
+              <br>
+              <h4>2: Given your schematic, circuit, and firmware, assuming the only thing that draws current is your LEDs, how long would your circuit run if powered by a 1200 mAh battery?</h4><br>
+              <br>
+                6 hours and 14 mins. because I = V/R, I have 5 volts in 9 branches with 4 having 220 ohm resistors and 2 having 100 ohm resistors, and 3 having 10k resistors. <br>
+              <br>
+              </dd>
+
+            </p>
+        </div>
+        
+    </body>
+</html>
