@@ -12,115 +12,90 @@
     <body> 
 
         <div class="header">
-            <h1>Skye's Assignment 2: Fade</h1>
-            <p>
-            <img src="fadeBoard.jpg" width=400>
-            <img src="IMG_0580.gif" width=300>
-            <img src="schematic.jpg" width=700></a>
-            <br>The device allows the user to change the strength of each color in the mixed LED, and has independent LEDs to see the strenght of the individual parts. 
-            <br>The Blue LED has a higher voltage drop thus to have the same current in all LEDS the blue LED needs to be paired with a lower resistor of 100 compared to the 220. 10k resistors were used with the buttons to prevent short circuts<br>
-            </p>
-            <p>
+          <h1>Skye's Assignment 3: Input Output!</h1>
+          <p>
+            <img src="3circut.jpg" width=400>
+            <img src="assignment3.gif" width=300>
+            <img src="IMG_0596.jpg" width=700></a>
+            <br>The device after being calibrated has an blue LED that lights up when it reads a colder tempreture and a red LED that lights up when it reads a warmer tempreture. 
+            <br>The Blue LED has a higher voltage drop thus to have the same current in all LEDS the blue LED needs to be paired with a lower resistor of 100 compared to the 220. 1M resistor was used in the voltage divider to prevent short circuts and it was a high number to increase the range of values being detected by the A0 pin.<br>
+          </p>
+          <p>
             <h3>Code:</h3>
             <br>
-            const int ledOutputRed = 11; //sets a variable to the pin for red in the mixed LED<br>
-            const int ledOutputGreen = 10; //sets a variable to the pin for green in the mixed LED<br>
-            const int ledOutputBlue = 9; //sets a variable to the pin for blue in the mixed LED<br>
-            const int ledPinRed = 6; //sets a variable to the pin for the red LED<br>
-            const int ledPinGreen = 5; //sets a variable to the pin for the green LED<br>
-            const int ledPinBlue = 3; //sets a variable to the pin for the blue LED<br>
-            const int buttonPinRed = 2; //sets a variable to the pin sensing the button for red<br>
-            const int buttonPinGreen = 1;//sets a variable to the pin sensing the button for green<br>
-            const int buttonPinBlue = 7;//sets a variable to the pin sensing the button for blue<br>
-            int buttonStateRed = 0; // sets the red button state<br>
-            int buttonStateGreen = 0; // sets the red button state<br>
-            int buttonStateBlue = 0; // sets the red button state<br>
-            int ledRed = 0; // sets the red amount to 0<br>
-            int ledGreen = 0; // sets the green amount to 0<br>
-            int ledBlue = 0; // sets the blue amount to 0<br>
+            const int heatInPin = A0; // pin to read the voltage across the thermistor <br>
+            const int hotOutPin = 6; // pin for the red light <br>
+            const int coldOutPin = 5; // pin for the blue light <br>
             <br>
-            void setup() { // start of the container of the pins I want to initialize<br>
-            <dd>pinMode(ledPinRed, OUTPUT); // initializes digital pin 6<br>
-              pinMode(ledPinGreen, OUTPUT); // initializes digital pin 5<br>
-              pinMode(ledPinBlue, OUTPUT); // initializes digital pin 3<br>
-              pinMode(ledOutputRed, OUTPUT); // initializes digital pin 11<br>
-              pinMode(ledOutputGreen, OUTPUT); // initializes digital pin 10<br>
-              pinMode(ledOutputBlue, OUTPUT); // initializes digital pin 9<br>
-              pinMode(buttonPinRed, INPUT); // initializes digital pin 2<br>
-              pinMode(buttonPinGreen, INPUT); // initializes digital pin 1<br>
-              pinMode(buttonPinBlue, INPUT); // initializes digital pin 7<br></dd>
-            }<br>
+            int sensorValue = 0; // this will be the variable that communicates what the sensor's response is <br>
+            int sensorOut = 0; // this will be the varialble that communicated the LED input from the processed sensor value <br>
+            int sensorMin = 1023;  // The sensor is set to the highest value so it will update lower when lower measurments occur when calibrating <br>
+            int sensorMax = 0;  // The sensor is set to the lowest value so it will update higher when higher measurments occur calibrating <br>
+            int sensorAverage = 0; // This is the value that determines the 0 point between what is considered warm or cold <br>
             <br>
-            void loop() { // start of the container of the code I want to repeat<br>
-              <br>
-              buttonStateRed = digitalRead(buttonPinRed); // detects if the red button is pressed<br>
-              buttonStateGreen = digitalRead(buttonPinGreen); // detects if the green button is pressed<br>
-              buttonStateBlue = digitalRead(buttonPinBlue); // detects if the blue button is pressed<br>
-              <br>
-              if (buttonStateRed == HIGH) { // if the red button is pressed the following code triggers<br>
-                if (ledRed == 100) { // if the amount of red is 100 the next 4 lines trigger<br>
-                    <dd>    digitalWrite(ledPinRed, LOW); //turns the red LED off<br>
-                    digitalWrite(ledOutputRed, LOW);//turns the red content in the LED off<br>
-                    delay(500); //waits half a sec or else the code breaks<br>
-                    ledRed = 0; //resets the red amount to 0<br></dd>
-                } <br>
-                else { // if the red amount is not 100 the next 5 lines trigger<br>
-                <dd>for (int i = 0; i < 25; i++) { // fades for 25 units<br>
-                    ledRed = ledRed + 1; // adds one to the red amount<br>
-                    analogWrite(ledPinRed, ledRed + i); // makes the red LED the red amount<br>
-                    analogWrite(ledOutputRed, ledRed + i); //makes the mixed LED the red amount<br>
-                    delay(20); //waits 20 miliseconds<br></dd>
-                  }<br>
-                }<br>
-              }<br>
-              <br>
-              if (buttonStateGreen == HIGH) { // if the green button is pressed the following code triggers<br>
-              if (ledGreen == 100) { // if the amount of green is 100 the next 4 lines trigger<br>
-                <dd>  digitalWrite(ledPinGreen, LOW); //turns the green LED off<br>
-                  digitalWrite(ledOutputGreen, LOW); //turns the green content in the LED off<br>
-                  delay(500); //waits half a sec or else the code breaks<br>
-                  ledGreen = 0; //resets the green amount to 0<br></dd>
-                } <br>
-                else { // if the green amount is not 100 the next 5 lines trigger<br>
-                <dd>for (int i = 0; i < 25; i++) { // fades for 25 units<br>
-                    ledGreen = ledGreen + 1; // adds one to the green amount<br>
-                    analogWrite(ledPinGreen, ledGreen); // makes the green LED the green amount<br>
-                    analogWrite(ledOutputGreen, ledGreen); //makes the mixed LED the green amount<br>
-                    delay(20); //waits 20 miliseconds<br></dd>
-                  }<br>
-                }<br>
-              }<br>
-              <br>
-              if (buttonStateBlue == HIGH) { // if the blue button is pressed the following code triggers<br>
-              if (ledBlue == 100) { // if the amount of blue is 100 the next 4 lines trigger<br>
-                <dd>digitalWrite(ledPinBlue, LOW); //turns the blue LED off<br>
-                    digitalWrite(ledOutputBlue, LOW); //turns the blue content in the LED off<br>
-                    delay(500); //waits half a sec or else the code breaks<br>
-                    ledBlue = 0; //resets the blue amount to 0<br></dd>
-                } <br>
-                else { // if the blue amount is not 100 the next 5 lines trigger<br>
-                <dd>for (int i = 0; i < 25; i++) { // fades 25 units<br>
-                    ledBlue = ledBlue + 1; // adds one to the blue amount<br>
-                    analogWrite(ledPinBlue, ledBlue); // makes the blue LED the blue amount<br>
-                    analogWrite(ledOutputBlue, ledBlue); //makes the mixed LED the blue amount<br>
-                    delay(25); //waits 20 miliseconds<br></dd>
-                  }<br>
-                }<br>
-              }<br>
-            }<br>
+            void setup() { // start of the container of the pins I want to initialize and code to run before the loop  <br>
+            Serial.begin(9600); // allows for serial prints later on  <br>
+            pinMode(hotOutPin,OUTPUT); // initializes pin 6  <br>
+            pinMode(coldOutPin,OUTPUT); // initializes pin 5 <br>
+            while (millis()< 10000) { //for the first 10secs the following code will run to callibrate the voltage readings  <br>
+              <dd> sensorValue = analogRead(heatInPin); //gets the votage value and set it to the sensorValue variable <br>
+              if (sensorValue > sensorMax) { //tests if the value is greater than the current largest value/ the value saved as sensorMax <br>
+              sensorMax = sensorValue; // if the last line is true the sensorValue's value becomes the new sensorMax value <br>
+              } <br>
+              if (sensorValue < sensorMin) { //tests if the value is smaller than the current smallest value/ the value saved as sensorMin <br>
+              sensorMin = sensorValue; // if the last line is true the sensorValue's value becomes the new sensorMin value <br>
+              } </dd><br>
+            } <br>
+            sensorAverage = (sensorMax + sensorMin)/2; //calculates the middle point between sensor min and max values by taking the average <br>
+            Serial.print("sensorMin ="); //prints the statment "sensorMin =" <br>
+            Serial.print(sensorMin); //prints the value stored as sensorMin <br>
+            Serial.print(", sensorMax ="); //prints the statment ", sensorMax =" <br>
+            Serial.print(sensorMax); //prints the value stored as sensorMax <br>
+            Serial.print(", sensorAve ="); //prints the statment ", sensorAve =" <br>
+            Serial.println(sensorAverage); //prints the value stored as sensorAverage and ends the line <br>
+            } <br>
             <br>
+            void loop() { // start of the container of the code I want to repeat <br>
+            sensorValue = analogRead(heatInPin); //gets the votage value and set it to the sensorValue variable <br>
+            sensorValue = constrain(sensorValue, sensorMin, sensorMax); //takes the sensorValue variable and makes it to be inbetween the sensorMax and sensorMin values <br>
+            sensorOut = map(sensorValue, sensorMin, sensorMax, 0, 255); //takes the sensorValue and corrisponds it to a value between 0 and 255 for the LEDS and saves it to the sensorOut Value <br>
+            if (sensorValue >= sensorAverage) { // tests if the sensorValue is or greater than sensorAverage <br>
+              <dd>analogWrite(hotOutPin,sensorOut); //turns on the red LED to be the value of sensorOut <br>
+              digitalWrite(coldOutPin, LOW); //turns off the Blue LED <br>
+              Serial.print("The Sensor is warm, value ="); //prints "The Sensor is warm, value ="  <br>
+              Serial.println(sensorOut); //prints the sensor out value <br></dd>
+            } <br>
+            if (sensorValue <= sensorAverage) { // tests if the sensorValue is or less than sensorAverage <br>
+              <dd>analogWrite(coldOutPin,(sensorOut)); //turns on the blue LED to be the value of sensorOut <br>
+              digitalWrite(hotOutPin, LOW); //turns off the red LED <br>
+              Serial.print("The Sensor is cold, value ="); //prints "The Sensor is cold, value =" <br>
+              Serial.println(sensorOut); //prints the sensor out value <br></dd>
+            } <br>
+            } <br>
 
-              <h3>Questions: </h3>
-              <dd><br>
-              <h4>1: Draw a chart where the X axis is time and the Y axis is voltage. Draw 3 lines representing the voltage across an LED with analogWrite(led, 64), analogWrite(led, 128), and analogWrite(led,255).</h4><br>
-              <img src="FadeQ1.jpg" width=400>
-              <br>
-              <h4>2: Given your schematic, circuit, and firmware, assuming the only thing that draws current is your LEDs, how long would your circuit run if powered by a 1200 mAh battery?</h4><br>
-              <br>
-                6 hours and 14 mins. because I = V/R, I have 5 volts in 9 branches with 4 having 220 ohm resistors and 2 having 100 ohm resistors, and 3 having 10k resistors. <br>
-              <br>
-              </dd>
+            <h3>Console Output Examples</h3>
+            sensorMin =0, sensorMax =272, sensorAve =136<br>
+            The Sensor is cold, value =65<br>
+            The Sensor is warm, value =220<br>
 
+
+            <h3>Questions: </h3>
+            <dd><br>
+            <h4>1: In your voltage divider, can the variable resistor be either R1 or R2 or does it need to be one or the other? Justify your answer with example calculations.</h4><br>
+             It can be either as the position of the resistance and voltage are additive in series. The voltage drop across the variable resistor would be the same in either position. The only difference would be the pin that we would be monitering the drop in voltage across the voltage divider would now be monitering the inverse voltage drop across the resistor, being inverted. <br>
+             V out = V in *R2/(R1+R2) <br>
+             Original position: Vout = 5*1,000,000,000/(R1 + 1,000,000,000) <br>
+             Switched position: Vout = 5*R1/(1,000,000,000 + R1) <br>
+             1 = R1/(1,000,000,000 + R1) + 1,000,000,000/(R1 + 1,000,000,000) <br>
+             <br>
+             <h4>2: Draw a graph where the x-axis is time and the y-axis is voltage. Plot the voltage at V-measure of your voltage divider of your shared gif.</h4><br>
+             <br>
+             <br>
+             <br>
+             <h4>3: AnalogWrite and analogRead are respectively 8-bit and 10-bit values. Imagine you had 10-bit PWM and a 16-bit analog-to-digital converter instead. How would this change your map() code? Explain your answer.</h4><br>
+             The current values used to change the LED when writing to it is between 0 and 255 because of the limit of it being 8 bits, if it was 10 bits we could use the values between 0 to 1023. Right now our reading range is from 0 to 1023 but with 16 bits we could get readings from 0 to 65535. These wouldn't measure and give greater reading but insead allow readings to be more specific.<br>
+             Our mapping code would instead be map(sensorValue, 0, 65535, 0, 1023) as opposed to the current ranges of map(sensorValue,0,1023,0,255) <br>
+             </dd>
             </p>
         </div>
         
