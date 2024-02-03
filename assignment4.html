@@ -17,8 +17,7 @@
             <img src="4breadboard.jpg" width=400>
             <img src="IMG_0624.gif" width=300>
             <img src="4layout.jpg" width=700></a>
-            <br>The device after being calibrated has an blue LED that lights up when it reads a colder tempreture and a red LED that lights up when it reads a warmer tempreture. 
-            <br>The Blue LED has a higher voltage drop thus to have the same current in all LEDS the blue LED needs to be paired with a lower resistor of 100 compared to the 220. 1M resistor was used in the voltage divider to prevent short circuts and it was a high number to increase the range of values being detected by the A0 pin.<br>
+            <br>The data sheet for the seven segment dispaly said the forrward current is 20 mili amps so i used a 220 ohm resistor as it was the closest single resitor I could use to get close to that amperage with the 5V. I used only 4 resistors because the digital pins ground the other pins connecting to the seven segment displays and it makes no difference the order of the resistor and the components as long as they are in series. 
           </p>
           <p>
             <h3>Code:</h3>
