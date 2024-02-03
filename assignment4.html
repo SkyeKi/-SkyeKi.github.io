@@ -14,83 +14,72 @@
         <div class="header">
           <h1>Skye's Assignment 4: Libraries!</h1>
           <p>
-            <img src="3circut.jpg" width=400>
-            <img src="assignment3.gif" width=300>
-            <img src="IMG_0596.jpg" width=700></a>
+            <img src="4breadboard.jpg" width=400>
+            <img src="IMG_0624.gif" width=300>
+            <img src="4layout.jpg" width=700></a>
             <br>The device after being calibrated has an blue LED that lights up when it reads a colder tempreture and a red LED that lights up when it reads a warmer tempreture. 
             <br>The Blue LED has a higher voltage drop thus to have the same current in all LEDS the blue LED needs to be paired with a lower resistor of 100 compared to the 220. 1M resistor was used in the voltage divider to prevent short circuts and it was a high number to increase the range of values being detected by the A0 pin.<br>
           </p>
           <p>
             <h3>Code:</h3>
             <br>
-            const int heatInPin = A0; // pin to read the voltage across the thermistor <br>
-            const int hotOutPin = 6; // pin for the red light <br>
-            const int coldOutPin = 5; // pin for the blue light <br>
+            // used Dean Reading's sevseg libary, v3.7.0 and example code as referance. Uses IRremote libary by shirriff, z3to, and ArminJo<br>
             <br>
-            int sensorValue = 0; // this will be the variable that communicates what the sensor's response is <br>
-            int sensorOut = 0; // this will be the varialble that communicated the LED input from the processed sensor value <br>
-            int sensorMin = 1023;  // The sensor is set to the highest value so it will update lower when lower measurments occur when calibrating <br>
-            int sensorMax = 0;  // The sensor is set to the lowest value so it will update higher when higher measurments occur calibrating <br>
-            int sensorAverage = 0; // This is the value that determines the 0 point between what is considered warm or cold <br>
+            #include < IRremote.h > //includes the IRremote libary<br>
+            #include < SevSeg.h > //includes the sevseg libary<br>
+            SevSeg sevseg; //initiates the display <br>
+            int IR_RECEIVE_PIN = 3; //initiates pin and sets it to variable name<br>
+            int displayValue = 0; //crates global variable named displayValue and sets it to 0<br>
             <br>
-            void setup() { // start of the container of the pins I want to initialize and code to run before the loop  <br>
-            Serial.begin(9600); // allows for serial prints later on  <br>
-            pinMode(hotOutPin,OUTPUT); // initializes pin 6  <br>
-            pinMode(coldOutPin,OUTPUT); // initializes pin 5 <br>
-            while (millis()< 10000) { //for the first 10secs the following code will run to callibrate the voltage readings  <br>
-              <dd> sensorValue = analogRead(heatInPin); //gets the votage value and set it to the sensorValue variable <br>
-              if (sensorValue > sensorMax) { //tests if the value is greater than the current largest value/ the value saved as sensorMax <br>
-              sensorMax = sensorValue; // if the last line is true the sensorValue's value becomes the new sensorMax value <br>
-              } <br>
-              if (sensorValue < sensorMin) { //tests if the value is smaller than the current smallest value/ the value saved as sensorMin <br>
-              sensorMin = sensorValue; // if the last line is true the sensorValue's value becomes the new sensorMin value <br>
-              } </dd><br>
-            } <br>
-            sensorAverage = (sensorMax + sensorMin)/2; //calculates the middle point between sensor min and max values by taking the average <br>
-            Serial.print("sensorMin ="); //prints the statment "sensorMin =" <br>
-            Serial.print(sensorMin); //prints the value stored as sensorMin <br>
-            Serial.print(", sensorMax ="); //prints the statment ", sensorMax =" <br>
-            Serial.print(sensorMax); //prints the value stored as sensorMax <br>
-            Serial.print(", sensorAve ="); //prints the statment ", sensorAve =" <br>
-            Serial.println(sensorAverage); //prints the value stored as sensorAverage and ends the line <br>
-            } <br>
+            void setup() //start of code I want to run once<br>
+            {<br>
+              <dd>Serial.begin(9600); //allows serial comands to be used and sets the rate to 9600<br>
+              byte numDigits = 4;  //input for the number of 7 segment displays being used<br>
+              byte digitPins[] = {1, 2, 4, 5}; // input for the pins being used for the digital pins<br>
+              byte segmentPins[] = {6, 7, 8, 9, 10, 11, 12, 13}; // input for the pins being used for the LED segments<br>
+              sevseg.begin(COMMON_CATHODE, numDigits, digitPins, segmentPins); //sets up the information needed to use the SVG libary, telling it the setup of the display and pin information for future use<br>
+              sevseg.setBrightness(10); // sudjested amount by Dean Reading due to update rate<br>
+              IrReceiver.begin(IR_RECEIVE_PIN, ENABLE_LED_FEEDBACK); // starts the reciver and allows it to recieve input<br></dd>
+            }<br>
             <br>
-            void loop() { // start of the container of the code I want to repeat <br>
-            sensorValue = analogRead(heatInPin); //gets the votage value and set it to the sensorValue variable <br>
-            sensorValue = constrain(sensorValue, sensorMin, sensorMax); //takes the sensorValue variable and makes it to be inbetween the sensorMax and sensorMin values <br>
-            sensorOut = map(sensorValue, sensorMin, sensorMax, 0, 255); //takes the sensorValue and corrisponds it to a value between 0 and 255 for the LEDS and saves it to the sensorOut Value <br>
-            if (sensorValue >= sensorAverage) { // tests if the sensorValue is or greater than sensorAverage <br>
-              <dd>analogWrite(hotOutPin,sensorOut); //turns on the red LED to be the value of sensorOut <br>
-              digitalWrite(coldOutPin, LOW); //turns off the Blue LED <br>
-              Serial.print("The Sensor is warm, value ="); //prints "The Sensor is warm, value ="  <br>
-              Serial.println(sensorOut); //prints the sensor out value <br></dd>
-            } <br>
-            if (sensorValue <= sensorAverage) { // tests if the sensorValue is or less than sensorAverage <br>
-              <dd>analogWrite(coldOutPin,(sensorOut)); //turns on the blue LED to be the value of sensorOut <br>
-              digitalWrite(hotOutPin, LOW); //turns off the red LED <br>
-              Serial.print("The Sensor is cold, value ="); //prints "The Sensor is cold, value =" <br>
-              Serial.println(sensorOut); //prints the sensor out value <br></dd>
-            } <br>
-            } <br>
-
-            <h3>Console Output Examples</h3>
-            sensorMin =0, sensorMax =272, sensorAve =136<br>
-            The Sensor is cold, value =65<br>
-            The Sensor is warm, value =220<br>
-
+            void loop() //start of code I want to repeat<br>
+            {<br>
+              <dd>if (IrReceiver.decode()) { // if input is recieved run this code<br>
+                    IrReceiver.resume(); //keeps the reciver detecting input<br>
+                  if (IrReceiver.decodedIRData.command == 0x46) { //if volume up is pressed run the following code<br>
+                    displayValue = displayValue + 1; //makes the displayvalue value one more<br>
+                    sevseg.setNumber(displayValue,0); //sets the value displayed to be the value stared in displayValue with a decimal point at the 0 position<br>
+                    <br>
+                  } else if (IrReceiver.decodedIRData.command == 0x15) {//if volume down is pressed run the following code<br>
+                    displayValue = displayValue - 1; //makes the displayvalue value one less<br>
+                    sevseg.setNumber(displayValue,0); //sets the value displayed to be the value stared in displayValue with a decimal point at the 0 position<br>
+                  }<br>
+                }<br>
+                sevseg.refreshDisplay(); // needs to run repetedly for display function<br></dd>
+            }<br>
+            <br>
 
             <h3>Questions: </h3>
             <dd><br>
-            <h4>1: Say you are using a servo motor you attach to pin 9. In your loop() you have the following code: for (int i=0, i < 180, i++){servo.write(i); delay(100);} </h4><br>
-            Draw a graph with the X axis in seconds, for two seconds, and the y-axis the voltage at pin 9 with respect to ground.<br>
-            <img src="IMG_0597.jpg" width=400>
+            <h4>1: Say you are using a servo motor you attach to pin 9. In your loop() you have the following code: for (int i=0, i < 180, i++){servo.write(i); delay(100);}
+            Draw a graph with the X axis in seconds, for two seconds, and the y-axis the voltage at pin 9 with respect to ground.</h4><br>
+            <img src="4q1.jpg" width=400><br>
+            The servo motor's readings are a pulse once per 20ms normally, but due to the delay the pulse would occur only every 0.1 seconds and the duty cycle would be slightly longer with each iteration until i is greater than 180.
              <br>
              <h4>2:  Your input device is slightly broken, leading it to give us an erroneous reading 1% of the time. How can we address this? Answer in (pseudo)code.</h4><br>
              <br>
-             ans <br>
+             new reading = get reading <br>
+             if new reading is > 2* old reading or < 0.5 * old reading <br>
+             new reading = old reading <br>
              <br>
-             <h4>3: Your input device is slightly noisy, leading the measurement to randomly deviate from the true measurement up or down by 10%. How can we address this? Answer in (pseudo)code.<br>
-             ans <br>
+             use new reading <br>
+             <br>
+             <h4>3: Your input device is slightly noisy, leading the measurement to randomly deviate from the true measurement up or down by 10%. How can we address this? Answer in (pseudo)code.</h4><br>
+             loop for i = 0; i >= 10 ; i++ <br>
+             reading i = get reading <br>
+             <br>
+             reported reading = average of readings 0 to 9 <br>
+             use reported reading as reading <br>
              </dd>
             </p>
         </div>
