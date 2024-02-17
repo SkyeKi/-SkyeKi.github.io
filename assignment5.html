@@ -1,0 +1,87 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+        <title>Skye's HCDE 439 Physical Computing Page!</title> 
+
+        <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+    </head> 
+    <body> 
+
+        <div class="header">
+          <h1>Skye's Assignment 5: High(er) voltage and transistors!</h1>
+          <p>
+            <img src="5breadboard.jpg" width=400>
+            <img src="IMG_0662.gif" width=300>
+            <img src="5layout.jpg" width=700></a>
+            <br>The data sheet for the ultasonic sensor showed an operating current of 15 mili amps so i used a 330 ohm resistor so that with the 5V the current would be close to that.
+          </p>
+          <p>
+            <h3>Code:</h3>
+            <br>
+            // used Tim Eckel's NewPing libary, v1.9.7 and example code as referance.<br>
+            <br>
+            #include < NewPing.h > //includes the libary <br> 
+            int sensorValue; // initalizing value for data after being converted and mapped<br>
+            int echotime; // initializing value for data before being processed <br>
+            #define MAX_DISTANCE 30 //because i wanted the leds to light up based on a close range of 30cm. <br> 
+            <br> 
+            NewPing sonar(10, 11, MAX_DISTANCE); // sets up of pin for sending and recieving value and maximum distance. <br> 
+            <br>
+            void setup(){ //start of code I want to run once <br>
+            Serial.begin(9600); // Open serial monitor at 9600 baud to see ping results. <br>
+            } <br>
+            <br>
+            void loop() //start of code I want to repeat<br>
+            {<br>
+              <dd>echotime = sonar.ping_median(5, MAX_DISTANCE); //gets time data from sensor and makes it a median of 5 readings<br>
+                sensorValue = map(sonar.convert_cm (echotime), 1, 20, 0, 255); //converts the time based data to be distance and maps it to be a value for  the LEDs, cannot be 0 because that is the default when the sensor has no reading in range <br>
+                analogWrite(9, 255-sensorValue); //writes the value for the transitor/ LEDs and inverts the value in the range so it's brighter as the distance is lower<br></dd>
+            }<br>
+            <br>
+
+            <h3>Questions: </h3>
+            <dd><br>
+            <h4>1: This is the datasheet for the n-mosfet transistor: https://www.diodes.com/assets/Datasheets/DMT6009LCT.pdLinks to an external site.f What is the absolute maximum amount of current between pins 2 and 3?</h4><br>
+            The servo motor's readings are a pulse once per 20ms normally, but due to the delay the pulse would occur only every 0.1 seconds and the duty cycle would be slightly longer with each iteration until i is greater than 180.
+             <br>
+             <h4>2: Draw a schematic for a circuit with using at least your arduino, a DC motor, a flyback diode, and capacitors between power and ground. Find parts with datasheets you could use for each of these schematic components.</h4><br>
+             <br>
+             <img src="5q2.jpg" width=400><br>
+             <br>
+             <h4>3: Here is the datasheet for the L293D chip: https://www.ti.com/product/L293DLinks to an external site.. Draw a schematic using at least your arduino, this chip, and two motors. Write (pseudo) code that shows how you would move the motors both forward, both back, then one forward one back, and one back then forward.</h4><br>
+             <img src="5q3.jpg" width=400><br>
+             analogWrite(enablePin1, speed); <br>
+             analogWrite(enablePin2, speed); <br>
+             <br>
+             digitalWrite(in1Pin, low) <br>
+             digitalWrite(in2Pin, high) <br>
+             digitalWrite(in3Pin, low) <br>
+             digitalWrite(in4Pin, high) <br>
+             delay  <br>
+             digitalWrite(in1Pin, high) <br>
+             digitalWrite(in2Pin, high) <br>
+             digitalWrite(in3Pin, low) <br>
+             digitalWrite(in4Pin, high) <br>
+             delay <br>
+             digitalWrite(in1Pin, low) <br>
+             digitalWrite(in2Pin, high) <br>
+             digitalWrite(in3Pin, high) <br>
+             digitalWrite(in4Pin, low) <br>
+             delay <br>
+             digitalWrite(in1Pin, low) <br>
+             digitalWrite(in2Pin, low) <br>
+             digitalWrite(in3Pin, low) <br>
+             digitalWrite(in4Pin, high) <br>
+             delay <br>
+             digitalWrite(in3Pin, high) <br>
+             digitalWrite(in4Pin, low) <br>
+             </dd>
+            </p>
+        </div>
+        
+    </body>
+</html>
