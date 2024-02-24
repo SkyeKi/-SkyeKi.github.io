@@ -1,140 +1,111 @@
-const BAUD_RATE = 9600; // This should match the baud rate in your Arduino sketch
+const BAUD_RATE = 9600; //matches to the arduino rate
 
-let port, connectBtn,xCor,yCor,xFruit,yFruit,upDown,rightLeft,brightness; // Declare global variables
-xCor = 0;
-yCor = 0;
-xFruit = 0;
-yFruit = 0;
-upDown = 0;
-rightLeft = 0;
-brightness = 0;
+let port, connectBtn,xCor,yCor,xHidden,yHidden,upDown,rightLeft,brightness; // global variables
+xCor = 0; //x starting location
+yCor = 0; //y starting location
 
-function setup() {
-  setupSerial(); // Run our serial setup function (below)
-
-  // Create a canvas that is the size of our browser window.
-  // windowWidth and windowHeight are p5 variables
-  createCanvas(windowWidth, windowHeight);
-  frameRate(50);
-  updateFruitCoordinates();
-  noStroke();
-  // p5 text settings. BOLD and CENTER are constants provided by p5.
-  // See the "Typography" section in the p5 reference: https://p5js.org/reference/
-  textFont("system-ui", 50);
-  textStyle(BOLD);
-  textAlign(CENTER, CENTER);
-  background("blue");
+function setup() {// code to run once
+  setupSerial(); // allows for Serial)
+  createCanvas(windowWidth, windowHeight); //sets size of space to be the size of the window
+  frameRate(50); //how often the screen updates
+  updateHidden(); //randomly generates the hidden point
+  noStroke(); // no lines on the points
+  textFont("system-ui", 50); // reference code from in class examples
+  textStyle(BOLD); // reference code from in class examples
+  textAlign(CENTER, CENTER); // reference code from in class examples
 }
 
-function draw() {
-  const portIsOpen = checkPort(); // Check whether the port is open (see checkPort function below)
-  if (!portIsOpen) return; // If the port is not open, exit the draw loop
-  let str = port.readUntil("\n"); // Read from the port until the newline
-  if (str.length == 0) return; // If we didn't read anything, return.
-  fill("green");
-  clear(); 
-  // Change text and colors based on button state. In p5, you can set colors
-  // using standard CSS color names as well as many other color formats.
-  let [a1, a2] = str.trim().split(",");
-  upDown = int(a1);
-  rightLeft = int(a2);
-  updateSnakeCoordinates();
-  checkGameStatus();
-  ellipse(xCor, yCor, 40, 40);
-  checkForFruit();
-  light();
+function draw() { //code to run multiple times
+  const portIsOpen = checkPort(); // reference code from in class examples
+  if (!portIsOpen) return; // reference code from in class examples
+  let str = port.readUntil("\n"); // reference code from in class examples
+  if (str.length == 0) return; // reference code from in class examples
+  fill("green"); // points generated will be green
+  clear(); //removes any previous marks
+  let [a1, a2] = str.trim().split(","); //assigns variables to data lines being read and seperated
+  upDown = int(a1); //assigns the first numerical variable to the name Updown
+  rightLeft = int(a2); //assigns the 2nd numerical variable to the name rightLeft
+  updateSeeker(); //changes the location of the point moving on the screen
+  checkEdges(); //makes sure values are within screen bounds
+  ellipse(xCor, yCor, 40, 40); // draws seeker icon
+  findHidden(); //checks if in range of hidden
+  light(); //changes LED
 }
 
-// Three helper functions for managing the serial connection.
-
-function setupSerial() {
-  port = createSerial();
-
-  // Check to see if there are any ports we have used previously
-  let usedPorts = usedSerialPorts();
-  if (usedPorts.length > 0) {
-    // If there are ports we've used, open the first one
-    port.open(usedPorts[0], BAUD_RATE);
+function setupSerial() {  // reference code from in class examples
+  port = createSerial(); // reference code from in class examples
+  let usedPorts = usedSerialPorts();  // reference code from in class examples
+  if (usedPorts.length > 0) { // reference code from in class examples
+    port.open(usedPorts[0], BAUD_RATE); // reference code from in class examples
   }
-
-  // create a connect button
-  connectBtn = createButton("Connect to Arduino");
-  connectBtn.position(5, 5); // Position the button in the top left of the screen.
-  connectBtn.mouseClicked(onConnectButtonClicked); // When the button is clicked, run the onConnectButtonClicked function
+  connectBtn = createButton("Connect to Arduino"); // reference code from in class examples
+  connectBtn.position(5, 5);  // reference code from in class examples
+  connectBtn.mouseClicked(onConnectButtonClicked);  // reference code from in class examples
 }
 
-function checkPort() {
-  if (!port.opened()) {
-    // If the port is not open, change button text
-    connectBtn.html("Connect to Arduino");
-    // Set background to gray
-    background("gray");
-    return false;
-  } else {
-    // Otherwise we are connected
-    connectBtn.html("Disconnect");
-    return true;
+function checkPort() {  // reference code from in class examples
+  if (!port.opened()) { // reference code from in class examples
+    connectBtn.html("Connect to Arduino"); // reference code from in class examples
+    background("gray"); // reference code from in class examples
+    return false; // reference code from in class examples
+  } else { // reference code from in class examples
+    connectBtn.html("Disconnect");  // reference code from in class examples
+    return true; // reference code from in class examples
+  } // reference code from in class examples
+} // reference code from in class examples
+
+function onConnectButtonClicked() { // reference code from in class examples
+  if (!port.opened()) {  // reference code from in class examples
+    port.open(BAUD_RATE);  // reference code from in class examples
+  } else { // reference code from in class examples
+    port.close(); // reference code from in class examples
   }
 }
 
-function onConnectButtonClicked() {
-  // When the connect button is clicked
-  if (!port.opened()) {
-    // If the port is not opened, we open it
-    port.open(BAUD_RATE);
-  } else {
-    // Otherwise, we close it!
-    port.close();
+function updateSeeker() { 
+  if (upDown > 520) { // if joystick is up
+    yCor = yCor + 10; //add 10 to location in that direction
+  }
+  if (upDown < 500) { // if joystick is down
+    yCor = yCor - 10;//add 10 to location in that direction
+  }
+  if (rightLeft > 520) { // if joystick is left
+    xCor = xCor + 10;//add 10 to location in that direction
+  }
+  if (rightLeft < 500) { // if joystick is right
+    xCor = xCor - 10;//add 10 to location in that direction
   }
 }
 
-function updateSnakeCoordinates() {
-  if (upDown > 520) {
-    yCor = yCor + 10;
+function checkEdges() {
+  if (xCor > width) { //if location is too far right
+    xCor = width; //resets location to edge
   }
-  if (upDown < 500) {
-    yCor = yCor - 10;
+  if (xCor < 0){//if location is too far left
+    xCor = 0;//resets location to edge
   }
-  if (rightLeft > 520) {
-    xCor = xCor + 10;
+  if (yCor > height){//if location is too far up
+    yCor = height;//resets location to edge
   }
-  if (rightLeft < 500) {
-    xCor = xCor - 10;
-  }
-}
-
-function checkGameStatus() {
-  if (xCor > width) {
-    xCor = width;
-  }
-  if (xCor < 0){
-    xCor = 0;
-  }
-  if (yCor > height){
-    yCor = height;
-  }
-  if (yCor < 0){
-    yCor = 0;
+  if (yCor < 0){//if location is too far down
+    yCor = 0;//resets location to edge
   }
 }
 
-function checkForFruit() {
-  point(xFruit, yFruit);
-  if ((xFruit-40) < xCor && xCor < (xFruit+40) && (yFruit-40) < yCor && yCor < (yFruit+40)) {
-    fill("red");
-    ellipse(xFruit, yFruit, 40, 40);
-    updateFruitCoordinates();
+function findHidden() {
+  if ((xHidden-40) < xCor && xCor < (xHidden+40) && (yHidden-40) < yCor && yCor < (yHidden+40)) { //if seeker is within 40 of hidden
+    fill("red"); //changes point color to red
+    ellipse(xHidden, yHidden, 40, 40); //draws hidden
+    updateHiidden(); //calls to change location
   }
 }
 
-function updateFruitCoordinates() {
-  xFruit = random(width);
-  yFruit = random(height);
+function updateHidden() {
+  xHidden = random(width); //random number within width
+  yHidden = random(height); //random number within height
 }
 
 function light (){
-  //brightness = constrain(dist(xFruit,xCor,yFruit,yCor),0,255);
-  brightness = constrain(xFruit-xCor,0,122)+constrain(yFruit-yCor,0,122);
-  //map(dist(xFruit,xCor,yFruit,yCor),0,dist(0,0,width,height),0,255);
-  port.write(brightness);
+  brightness = constrain(xHidden-xCor,0,122)+constrain(yHidden-yCor,0,122); // Adjusts the brightness of the LED with half according to the difference in x axis and the other half y axis. Issues if point is before current location. 
+  port.write(brightness); //givens arduino brightness value
 }
