@@ -1,0 +1,169 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+        <title>Skye's HCDE 439 Physical Computing Page!</title> 
+
+        <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+    </head> 
+    <body> 
+
+        <div class="header">
+          <h1>Skye's Assignment 6: Talking to the web! </h1>
+          <h3>Plays multiple rounds of the game hot and cold using the LED to tell the user if they are getting closer to the hidden point/h3>
+          <p>
+            <img src="A6board.jpg" width=400>
+            <img src="IMG_0690.gif" width=300>
+            <img src="IMG_0692.jpg" width=700></a>
+            <br>220 ohm resistor for the LED for a current close to 20 miliamps 
+          </p>
+          <p>
+
+            <h3>Arduino Code:</h3>
+            <br>
+            const int UpDown = A1; //pin recieving joystick verticle<br>
+            const int LeftRight = A0; //pin recieving joystick horizontal<br>
+            const int lEDPin = 11; //pin for LED<br>
+            <br>
+            void setup() //code to run once<br>
+            {<br>
+              Serial.begin(9600);//starts serial at same rate it will be read<br>
+              Serial.setTimeout(10); //how often serial will be read<br>
+              pinMode(lEDPin, OUTPUT); // Sets the pin as output<br>
+              pinMode(UpDown, INPUT);  // Sets the pin as input<br>
+              pinMode(LeftRight, INPUT);  // Sets the pin as input<br>
+            }<br>
+            <br>
+            void loop() //code to run on repeat<br>
+            {<br>
+              Serial.print(analogRead(UpDown)); //prints verticle value<br>
+              Serial.print(","); // prints comma to seperate values<br>
+              Serial.println(analogRead(LeftRight)); //prints horizontal value<br>
+              delay(50); // add some delay between reads<br>
+              if(Serial.available()>0){ // listens for serial activity<br>
+                int inByte = Serial.read(); //takes numeric value of activity<br>
+                analogWrite(lEDPin,255-inByte); //sets LED brightness as inverse of value in browser<br>
+              }<br>
+            }<br>
+            <br>
+            <h3>js Code:</h3>
+            <br>
+            const BAUD_RATE = 9600; //matches to the arduino rate<br>
+            <br>
+            let port, connectBtn,xCor,yCor,xHidden,yHidden,upDown,rightLeft,brightness; // global variables<br>
+            xCor = 0; //x starting location<br>
+            yCor = 0; //y starting location<br>
+            
+            function setup() {// code to run once<br>
+              setupSerial(); // allows for Serial<br>
+              createCanvas(windowWidth, windowHeight); //sets size of space to be the size of the window<br>
+              frameRate(50); //how often the screen updates<br>
+              updateHidden(); //randomly generates the hidden point<br>
+              noStroke(); // no lines on the points<br>
+              textFont("system-ui", 50); // reference code from in class examples<br>
+              textStyle(BOLD); // reference code from in class examples<br>
+              textAlign(CENTER, CENTER); // reference code from in class examples<br>
+            }<br>
+            <br>
+            function draw() { //code to run multiple times<br>
+              const portIsOpen = checkPort(); // reference code from in class examples<br>
+              if (!portIsOpen) return; // reference code from in class examples<br>
+              let str = port.readUntil("\n"); // reference code from in class examples<br>
+              if (str.length == 0) return; // reference code from in class examples<br>
+              fill("green"); // points generated will be green<br>
+              clear(); //removes any previous marks<br>
+              let [a1, a2] = str.trim().split(","); //assigns variables to data lines being read and seperated<br>
+              upDown = int(a1); //assigns the first numerical variable to the name Updown<br>
+              rightLeft = int(a2); //assigns the 2nd numerical variable to the name rightLeft<br>
+              updateSeeker(); //changes the location of the point moving on the screen<br>
+              checkEdges(); //makes sure values are within screen bounds<br>
+              ellipse(xCor, yCor, 40, 40); // draws seeker icon<br>
+              findHidden(); //checks if in range of hidden<br>
+              light(); //changes LED<br>
+            }<br>
+            <br>
+            function setupSerial() {  // reference code from in class examples<br>
+              port = createSerial(); // reference code from in class examples<br>
+              let usedPorts = usedSerialPorts();  // reference code from in class examples<br>
+              if (usedPorts.length > 0) { // reference code from in class examples<br>
+                port.open(usedPorts[0], BAUD_RATE); // reference code from in class examples<br>
+              }<br>
+              connectBtn = createButton("Connect to Arduino"); // reference code from in class examples<br>
+              connectBtn.position(5, 5);  // reference code from in class examples<br>
+              connectBtn.mouseClicked(onConnectButtonClicked);  // reference code from in class examples<br>
+            }<br>
+            <br>
+            function checkPort() {  // reference code from in class examples<br>
+              if (!port.opened()) { // reference code from in class examples<br>
+                connectBtn.html("Connect to Arduino"); // reference code from in class examples<br>
+                background("gray"); // reference code from in class examples<br>
+                return false; // reference code from in class examples<br>
+              } else { // reference code from in class examples<br>
+                connectBtn.html("Disconnect");  // reference code from in class examples<br>
+                return true; // reference code from in class examples<br>
+              } // reference code from in class examples<br>
+            } // reference code from in class examples<br>
+            <br>
+            function onConnectButtonClicked() { // reference code from in class examples<br>
+              if (!port.opened()) {  // reference code from in class examples<br>
+                port.open(BAUD_RATE);  // reference code from in class examples<br>
+              } else { // reference code from in class examples<br>
+                port.close(); // reference code from in class examples<br>
+              }<br>
+            }<br>
+            
+            function updateSeeker() { <br>
+              if (upDown > 520) { // if joystick is up<br>
+                yCor = yCor + 10; //add 10 to location in that direction<br>
+              }<br>
+              if (upDown < 500) { // if joystick is down<br>
+                yCor = yCor - 10;//add 10 to location in that direction<br>
+              }<br>
+              if (rightLeft > 520) { // if joystick is left<br>
+                xCor = xCor + 10;//add 10 to location in that direction<br>
+              }<br>
+              if (rightLeft < 500) { // if joystick is right<br>
+                xCor = xCor - 10;//add 10 to location in that direction<br>
+              }<br>
+            }<br>
+            <br>
+            function checkEdges() {<br>
+              if (xCor > width) { //if location is too far right<br>
+                xCor = width; //resets location to edge<br>
+              }<br>
+              if (xCor < 0){//if location is too far left<br>
+                xCor = 0;//resets location to edge<br>
+              }<br>
+              if (yCor > height){//if location is too far up<br>
+                yCor = height;//resets location to edge<br>
+              }<br>
+              if (yCor < 0){//if location is too far down<br>
+                yCor = 0;//resets location to edge<br>
+              }<br>
+            }<br>
+            <br>
+            function findHidden() {<br>
+              if ((xHidden-40) < xCor && xCor < (xHidden+40) && (yHidden-40) < yCor && yCor < (yHidden+40)) { //if seeker is within 40 of hidden<br>
+                fill("red"); //changes point color to red<br>
+                ellipse(xHidden, yHidden, 40, 40); //draws hidden<br>
+                updateHiidden(); //calls to change location<br>
+              }<br>
+            }<br>
+            <br>
+            function updateHidden() {<br>
+              xHidden = random(width); //random number within width<br>
+              yHidden = random(height); //random number within height<br>
+            }<br>
+            <br>
+            function light (){<br>
+              brightness = constrain(xHidden-xCor,0,122)+constrain(yHidden-yCor,0,122); // Adjusts the brightness of the LED with half according to the difference in x axis and the other half y axis. Issues if point is before current location. <br>
+              port.write(brightness); //givens arduino brightness value<br>
+            }<br>
+
+        </div>
+        
+    </body>
+</html>
