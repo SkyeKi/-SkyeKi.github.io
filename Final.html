@@ -1,0 +1,207 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+
+        <title>Skye's HCDE 439 Physical Computing Page!</title> 
+
+        <link href="style.css" media="screen" rel="stylesheet" type="text/css" />
+
+    </head> 
+    <body> 
+
+        <div class="header">
+          <h1>Skye's Final</h1>
+          <h3>A fuzzy terrifying robot<h3>
+          <p>
+            <img src="FinalVideo.gif" width=400>
+          </p>
+          <p>
+            <img src="final sketch.jpg" width=400>
+            <h3>Concept:</h3>
+            <br>
+            A desk companion robot that is pettable. The 'fuzzy buddy' displays different faces and does different interactions based on the combination of inputs. Inputs are recieved through stroke sensors comprised of capacitace sensors. The device runs off of it's own power source so it can be independent of a charger. The device moves on two sets of bristles that are being jostled by a motor each.<br>
+            <br>
+            <h3>Materials:</h3>
+            <br>
+            •	Conductive thread<br>
+            •	2 x DC motors<br>
+            •	2 x 9V batteries<br>
+            •	An 8x8 LED matrix<br>
+            •	H bridge<br>
+            •	6 x 10k resistors<br>
+            •	Wires<br>
+            •	Fabric<br>
+            •	Screws<br>
+            •	Styrofoam piece for structure<br>
+            •	Needle<br>
+            •	Wood to lazer cut for base and frame<br>
+            <br>
+            <img src="FinalTesting.jpg" width=400>
+            <img src="FinalWires.jpg" width=400>
+            <h3>Code: </h3>
+            <br>
+            #include "LedControl.h" //libary for 8x8 LED matrix<br>
+            #include "CapacitiveSensor.h" //libary for capacitance sensors<br>
+            const int motorRF = 1; //Right forward motor<br>
+            const int motorRB = 5; //Right back motor<br>
+            const int motorLF = 2; //Left forward motor<br>
+            const int motorLB = 4; //Left back motor<br>
+            const int dataPin   = 13; //Data pin for 8x8 LED matrix<br>
+            const int selectPin = 12; //Select pin for 8x8 LED matrix<br>
+            const int clockPin  = 8; //Clock pin for 8x8 LED matrix<br>
+            LedControl lc=LedControl(dataPin, clockPin, selectPin, 0);//Set up the code with the right pins and number of matixes<br>
+            CapacitiveSensor   cs_7_11 = CapacitiveSensor(7,11);//front left area<br>
+            CapacitiveSensor   cs_7_10 = CapacitiveSensor(7,10);//back left area<br>
+            CapacitiveSensor   cs_7_9 = CapacitiveSensor(7,9);//front right area<br>
+            CapacitiveSensor   cs_7_3 = CapacitiveSensor(7,3);//back left area<br>
+            <br>
+            void setup() { //code to run once<br>
+              Serial.begin(9600); //setting serial rate<br>
+              lc.shutdown(0,false); //setting up the matrix<br>
+              lc.setIntensity(0,8); //Setting the brightness of the LEDS in the matrix<br>
+              lc.clearDisplay(0); //Cleans the display if any LEDs are on<br>
+              pinMode(7, OUTPUT); //pin for the power for the Capacitors<br>
+              pinMode(5, OUTPUT); //pin for the power for the H bridge<br>
+              digitalWrite(7,HIGH); //power for the Capacitors<br>
+              digitalWrite(5,HIGH); //power for the H bridge<br>
+            }<br>
+            <br>
+            void loop() { //code to run on repeat<br>
+              lc.clearDisplay(0);//Clears screen if updated by behaviour<br>
+              lc.setLed(0,5, 3, true);//:| face smile<br>
+              lc.setLed(0,5, 4, true);//:| face smile<br>
+              lc.setLed(0,3, 6, true);//:| face one eye<br>
+              lc.setLed(0,3, 1, true);//:| face other eye<br>
+              int frontLeft =  cs_7_11.capacitiveSensor(30); //get value for front left capacitor area <br>
+              int backLeft =  cs_7_10.capacitiveSensor(30); //get value for back left capacitor area <br>
+              int backRight =  cs_7_9.capacitiveSensor(30); //get value for back right capacitor area <br>
+              int frontRight =  cs_7_3.capacitiveSensor(30); //get value for front right capacitor area <br>
+              delay(100); //To reduce how often the sensors are being read <br>
+              Serial.print(backLeft); //For testing, back left value<br>
+              Serial.print(", "); //For testing, seperator<br>
+              Serial.print(backRight);  //For testing, back right<br>
+              Serial.print(", "); //For testing, seperator<br>
+              Serial.print(frontLeft); //For testing, front left<br>
+              Serial.print(", "); //For testing, seperator<br>
+              Serial.println(frontRight); //For testing, front right, prints the line and last value<br>
+              if ((backLeft > 250) && (backRight < 250) && (frontLeft < 250) && (frontRight < 250)){ //conditional test for turing left <br>
+                left(); //calls turn left behaviour<br>
+              }<br>
+              if ((backLeft < 250) && (backRight > 250) && (frontLeft < 250) && (frontRight < 250)){ //conditional test for turing right <br>
+                right(); //calls turn right behaviour<br>
+              }<br>
+              if ((backLeft < 250) && (backRight < 250) && (frontLeft > 250) && (frontRight > 250)){ //conditional test for moving forrward <br>
+                forward(); //calls forward behaviour<br>
+              }<br>
+              if ((backLeft > 250) && (backRight > 250) && (frontLeft < 250) && (frontRight < 250)){ //conditional test for scratch <br>
+                scratch(); //calls scratch behaviour<br>
+              }<br>
+            }<br>
+            <br>
+            void right(){ //Turn right behaviour<br>
+              lc.clearDisplay(0); //clears display of default face<br>
+              lc.setLed(0,5, 3, true); //looking right face<br>
+              lc.setLed(0,5, 4, true);<br>
+              lc.setLed(0,3, 5, true);<br>
+              lc.setLed(0,3, 0, true);<br>
+              digitalWrite(motorRF,LOW); //right motor on<br>
+              digitalWrite(motorRB,HIGH);<br>
+              delay(1000); //time to turn<br>
+              digitalWrite(motorRF,LOW); //turn off motors<br>
+              digitalWrite(motorRB,LOW);<br>
+            }
+            
+            void left(){ //Turn left behaviour<br>
+              lc.clearDisplay(0); //clears display of default face<br>
+              lc.setLed(0,5, 3, true); //looking left face<br>
+              lc.setLed(0,5, 4, true);<br>
+              lc.setLed(0,3, 7, true);<br>
+              lc.setLed(0,3, 2, true);<br>
+              digitalWrite(motorLF,HIGH); //left motor on<br>
+              digitalWrite(motorLB,LOW);<br>
+              delay(1000); //time to turn<br>
+              digitalWrite(motorLF,LOW); //turn off motors<br>
+              digitalWrite(motorLB,LOW);<br>
+            }<br>
+            <br>
+            void scratch(){ //Scratch behaviour<br>
+              lc.clearDisplay(0); //clears display of default face<br>
+              lc.setLed(0,5, 3, true); //>.< face<br>
+              lc.setLed(0,5, 4, true);<br>
+              lc.setLed(0,3, 6, true);<br>
+              lc.setLed(0,3, 5, true);<br>
+              lc.setLed(0,3, 1, true);<br>
+              lc.setLed(0,3, 2, true);<br>
+              digitalWrite(motorRF,LOW); //Move forwards<br>
+              digitalWrite(motorRB,HIGH);<br>
+              digitalWrite(motorLF,HIGH);<br>
+              digitalWrite(motorLB,LOW);<br>
+              delay(500); //wait<br>
+              digitalWrite(motorRF,HIGH); //Move backwards<br>
+              digitalWrite(motorRB,LOW);<br>
+              digitalWrite(motorLF,LOW);<br>
+              digitalWrite(motorLB,HIGH);<br>
+              delay(500); //wait<br>
+                digitalWrite(motorRF,LOW); //Move forwards<br>
+              digitalWrite(motorRB,HIGH);<br>
+              digitalWrite(motorLF,HIGH);<br>
+              digitalWrite(motorLB,LOW);<br>
+              delay(500); //wait<br>
+              digitalWrite(motorRF,HIGH); //Move backwards<br>
+              digitalWrite(motorRB,LOW);<br>
+              digitalWrite(motorLF,LOW);<br>
+              digitalWrite(motorLB,HIGH);<br>
+              delay(500); //wait<br>
+              digitalWrite(motorRF,LOW); //turn off motors<br>
+              digitalWrite(motorRB,LOW);<br>
+              digitalWrite(motorLF,LOW);<br>
+              digitalWrite(motorLB,LOW);<br>
+            }<br>
+            <br>
+            void forward(){ //Forward behaviour<br>
+              lc.clearDisplay(0); //clears display of default face<br>
+              lc.setLed(0,5, 3, true); //New determined face<br>
+              lc.setLed(0,6, 2, true);<br>
+              lc.setLed(0,5, 4, true);<br>
+              lc.setLed(0,6, 5, true);<br>
+              lc.setLed(0,3, 6, true);<br>
+              lc.setLed(0,3, 1, true);<br>
+              digitalWrite(motorRF,LOW); //Move forward<br>
+              digitalWrite(motorRB,HIGH);<br>
+              digitalWrite(motorLF,HIGH);<br>
+              digitalWrite(motorLB,LOW);<br>
+              delay(1000); //wait<br>
+              digitalWrite(motorRF,LOW); //turn off motors<br>
+              digitalWrite(motorRB,LOW);<br>
+              digitalWrite(motorLF,LOW);<br>
+              digitalWrite(motorLB,LOW);<br>
+            }<br>
+            <br>
+            <img src="FinalSide.jpg" width=400>
+            <h3>Technical: </h3>
+            <br>
+            Layer 1: fabric with rows of capacitance thread<br>
+            <img src="FinalCapacitance.jpg" width=400>
+            <br>
+            Layer 2: foam shape and capacitace thread connections to wires<br>
+            <br>
+            Layer 3: breadboard with capacitors and H bridge<br>
+            <img src="FinalSchematic.jpg" width=400>
+            <br>
+            Layer 4: wood layer<br>
+            <br>
+            Layer 5: arduino board with LED matrix on the outside<br>
+            <br>
+            Layer 6: wood layer<br>
+            <br>
+            Layer 7: Where motors and batteries are attached<br>
+            <img src="FinalBattery.jpg" width=400>
+            <br>
+            Layer 8: bristles/brushes<br>
+            <br>
+        </div>
+        
+    </body>
+</html>
