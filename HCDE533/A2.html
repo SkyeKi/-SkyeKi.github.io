@@ -12,21 +12,36 @@
     <body> 
 
         <div class="header">
-            <h1>A1: Modelling and Laser Cutting!</h1>
+            <h1>A2: Parametric Modelling with Grasshopper!</h1>
             <p>
-            <h5><dd>Make a kit consisting of at least 30 instances of at least one unique part! The parts must have slots that press fit into the other parts in the kit! The parts must be laser cut out of cardboard! Your fit should be such that the parts do not come apart with a light shaking! You must model your parts!
+            <h5><dd>Create a parametric model using a grasshopper definition. Using your model, design parts to be laser cut that can be clipped together. At least one of your parts should enable you to connect one of your pieces to another without use of glue or fasteners. Your grasshopper definition should allow you to vary the thickness of your materials, and also vary other design parameters. Include notes in your grasshopper definition so it's clear what a user should input and bake.
+                <br>
+                Laser cut your parts and construct your physical model. Your physical model should contain at least 30 parts.
+                <br>
+                Submit the grasshopper definition, your cut files, and a documentation of your laser cut object.
             </dd></h5></p>
             <p>
             <h2>Documentation:</h2>
+            <img src="RhinoModels.jpg" width=400>
+            <img src="RhinoThickness.jpg" width=400>
+            <img src="vase.jpg" width=400>
             <h3>Source Files:</h3>
             <br>
+            <a href="533Week2Grasshopper.gh">Grasshopper file</a>
+            <a href="533Week2.3dm.rhl">Rhino file</a>
+            <a href="week2 copy.ai">Cut Ai file</a>
             <br>
             <h3>Laser Cutting Settings: </h3>
             <dd><br>
-              <h4>1: Draw a graph where the X axis is time and the Y axis is voltage across the LEDs. Draw a line for each of your 3 LEDs.</h4><br>
+                <p>For Vector:<br>
+                Speed: 15<br>
+                power: 80<br>
+                frequency: 50<br>
+              <br>
             </dd>
             <br>
             <h3>Write up: </h3>
+            Used the vase surface made in class as my surface to pattern on. Using sliders segmented it into 12 by 9 segments. I created a shape that had indented slots and the same shape tabs  beyond by bounding box. I extruded the shape in the Z for my pice's thickness before applying it the the vase surface. I then unrolled the baked sufaces before exporting those surfaces as an AI file to cut. Due to fit issues I did out line the shapes by 0.01" to get a better fit. I also rescaled my design for easier manufacturing. 
             </p>
         </div>
         
