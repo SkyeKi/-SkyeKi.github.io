@@ -12,22 +12,170 @@
     <body> 
 
         <div class="header">
-            <h1>A1: Modelling and Laser Cutting!</h1>
+            <h1>A3: 3D printing!</h1>
             <p>
-            <h5><dd>Make a kit consisting of at least 30 instances of at least one unique part! The parts must have slots that press fit into the other parts in the kit! The parts must be laser cut out of cardboard! Your fit should be such that the parts do not come apart with a light shaking! You must model your parts!
-            </dd></h5></p>
+            </p>
             <p>
-            <h2>Documentation:</h2>
-            <h3>Source Files:</h3>
-            <br>
-            <br>
-            <h3>Laser Cutting Settings: </h3>
+            <img src="week3firstImage.jpg" width=600>
+            <h2>The Cubes:</h2>
+            <img src="weekcubes.jpg" width=200>
+            <h3>High quality cube</h3>
             <dd><br>
-              <h4>1: Draw a graph where the X axis is time and the Y axis is voltage across the LEDs. Draw a line for each of your 3 LEDs.</h4><br>
+                <p>
+                    20.00mm high<br>
+                    19.95mm deep<br>
+                    19.99mm width<br>
+                    No skirt<br>
+                    <br>
+                    Failures:<br>
+                    lifted at the edges that connected to the plate <br>                   
+                    </p><br>
+            </dd>
+            <h3>Standard quality cube</h3>
+            <dd><br>
+                <p>
+                    19.97mm high<br>
+                    20.01mm deep<br>
+                    19.92mm width<br>
+                    No skirt<br>
+                    <br>
+                    Failures:
+                    failed to adhear to plate<br>
+                    failed halfway<br>
+                    lifted at the edges that connected to the plate <br>
+            </p><br>
+            </dd>
+            <h3>Low quality cube</h3>
+            <dd><br>
+                <p>
+                    19.87mm high<br>
+                    20.02mm deep<br>
+                    20.08mm width<br>
+                    Skirt<br>
+                    <br>
+                    Failures:<br>
+                </p><br>
+            </dd>
+            <h3>Concentric cube</h3>
+            <dd><br>
+                <p>20.01mm high<br>
+                    20.05mm deep<br>
+                    20.05mm width<br>
+                    No Skirt<br>
+                    Standard quality<br>
+                    <br>
+                    Failures:<br>
+                </p><br>
+            </dd>
+            <h2>The Tubes & Cylinders:</h2>
+            <img src="week3cylinders.jpg" width=200>
+            <h3>Single extrusion thickness tube:</h3>
+            <dd><br>
+                <p>30.03mm high<br>
+                    29.83mm deep<br>
+                    29.38mm width<br>
+                    0.48mm thick<br>
+                    Skirt<br>
+                    Standard quality<br>
+                    <br>
+                    Failures:<br>
+                    <br>
+                    Files:<br>
+                    <a href="Cylinder.stl">wrong thickness stl</a>
+                    <a href="tubeZeroThick.stl">no thickness stl</a>
+                    <br>
+                </p><br>
+            </dd>
+            <h3>Double extrusion thickness tube with random z-seam alignment:</h3>
+            <dd><br>
+                <p>29.96mm high<br>
+                    29.69mm deep<br>
+                    29.34mm width<br>
+                    0.82mm thick<br>
+                    Skirt<br>
+                    Standard quality<br>
+                    <br>
+                    Failures:<br>
+                    <br>
+                    Files:<br>
+                    <a href="Cylinder.stl">wrong thickness stl</a>
+                    <a href="tubeZeroThick.stl">no thickness stl</a>
+                    <br>
+                </p><br>
+            </dd>
+            <h3>spiralize outer contour cylinder</h3>
+            <dd><br>
+                <p>30.11mm high<br>
+                    29.58mm deep<br>
+                    29.83mm width<br>
+                    0.55mm thick<br>
+                    Skirt<br>
+                    Standard quality<br>
+                    <br>
+                    Failures:<br>
+                    file had preexisting thickness had to redo<br>
+                    <br>
+                    Files:<br>
+                    <a href="CylinderFill.stl">stl</a>
+                    <br>
+                </p><br>
+            </dd>
+            <h3>side printed cylinder</h3>
+            <dd><br>
+                <p>30.13mm high<br>
+                    29.96mm deep<br>
+                    29.98mm width<br>
+                    Skirt and supports<br>
+                    Standard quality<br>
+                    <br>
+                    Failures:<br>
+                    file had preexisting thickness had to redo<br>
+                    <br>
+                    Files:<br>
+                    <a href="CylinderFill.stl">stl</a>
+                    <br>
+                </p><br>
+            </dd>
+            <h2>The Clips:</h2>
+            <h3>Documentation:</h3>
+            <dd><br>
+                <p>Design was for joining two existing triangles from the first 533 assignment, with a hinge between them. <br>
+                    <br>
+                    <img src="week3clip1.jpg" width=200>
+                    <img src="week3clip2.jpg" width=200>
+                    <img src="week3clip3.jpg" width=200>
+                    <img src="week3clip5.jpg" width=200>
+                    <br>
+                    First attempt after two bad starts was successful but had a lot of movement side to side, did not hold all cardboard triangles as tight as wanted, overall a little large, and finally the edges near the hinge impeded full range. Chamfered the inner edge for larger movement, decreased overall overall length, decreased the space in the slot, added small teeth for grip, added a stop on the one side, and created an inner grove for more ease of movement.
+                    <br><br>
+                    <img src="week3clip4.jpg" width=200>
+                    <img src="week3clip6.jpg" width=200>
+                    <img src="week3clip7.jpg" width=200>
+                    <br>
+                    Second print at large scale failed but was still usable. Reprinted. Needed to add a second stopper to prevent movement, enlarged the chamfer for more range of angles.
+                    <br><br>
+                    <img src="finalCliprender.png" width=200>
+                    <img src="finalClipPreview.png" width=200>
+                    <br>
+                    Third print failed twice. Changed board on third attempt.</p><br>
+            </dd>
+            
+            <h3>Source Files:</h3>
+            <dd><br>
+                <p>
+                    Final version:<br>
+                    <a href="FinalClip.3dm">Rhino file</a>
+                    <a href="FinalClip.stl">stl file</a>
+                    <a href="FinalClip.gcode">gcode file</a>
+                    <br>
+                    Other versions:<br>
+                    <a href="cubeWeek3FinalClip2.stl">V2 stl</a>
+                    <a href="cubeWeek3FinalClip2.stl">V1 stl</a>
+                </p><br>
             </dd>
             <br>
-            <h3>Write up: </h3>
-            </p>
+            <br>
+           
         </div>
         
     </body>
