@@ -12,23 +12,75 @@
     <body> 
 
         <div class="header">
-            <h1>A1: Modelling and Laser Cutting!</h1>
+            <h1>A4: Subtractive Manufacturing!</h1>
             <p>
-            <h5><dd>Make a kit consisting of at least 30 instances of at least one unique part! The parts must have slots that press fit into the other parts in the kit! The parts must be laser cut out of cardboard! Your fit should be such that the parts do not come apart with a light shaking! You must model your parts!
+            <h5><dd>Option 1: CNC milling a box
+                <br>
+                Design a box with e.g. boxjoints/fingerjoints, tabs, or another joining method that can be milled out of FR1 on the Othermill. As needed, you may use dogbones or other milling aids. Use Bantam Tools' software (Links to an external site.) to generate your g-code. Document your toolpathing method.  Mill the box and assemble it.
+                <br>
             </dd></h5></p>
             <p>
-            <h2>Documentation:</h2>
+            <h2>Sketches:</h2>
+            <img src="week4Sketch1.jpg" width=400>
+            <img src="week4Sketch2.jpg" width=800>
+            <dd><br><p>
+                During class I started some sketches that used the idea of interlacing waves as a connecting edge. If these two surfaces were in line with each other it would be a seal, at 90 degrees it would be full of gaps as only the outer edges would be interlocking and leave gaps similar to the dog bones. At 45 degrees I thought i could i could get at least a corner edge of a part to touch the other part at all times. I later realized a mistake that there would be some conflict with the line of the curve at an angle with the thickness of the material similar to the 90 degree version. I chose to keep moving forward with this design with a little larger gap between materials to see how precise i could get it. For the top and bottom piece I was going to do an octagon panel with an engraving for the pannels to fit into. The inside risen area could have sharp edges to match the panels and the outer corners would have exagerated rounding to account for the excess material overlapping of the panels. I ended up doing a different lid desgin than shown in these sketches.
+              <br>
+            </dd>
+            </p>
+
+            <h2>Rhino</h2>
+            <img src="Week4Rhino.png" width=800>
+            <img src="Week4RhinoModel.png" width=400>
+            <dd><br><p>
+                Pictured above is the 3D model using my inital panels and the final 2D version of the parts with cutting lines in red, engaving in blue, and personal reference lines in black from trying to figure out the engaving settings. The difference beween the top and bottom panels is just the centeral red line being ommited for the top panel of the middle shape. The cutting outline is 0.5 away from the shape for the two shapes on the right but 0.375 away for the side panel on the left. In testing 0.35 was too loose for the side panel and should idealy be 0.3625, but i did not want to waste further material testing this. The lid panel on the right is slightly larger than the hole in the top panel with engraving around the edges so some part of it can still fit in the top hole. The top and bottom panels now also include notches to help keep the side panels in place, these holes are slightly wider than the side panel tab to account for the rounding of the tab in the corners.
+            <br>
+            </dd>
+            </p>
+            <h3>Source Files:</h3>
+            <a href="Week4sugarbox.3dm.rhl">Rhino file</a><br>
+            <a href="week4PanelOutline.dxf">side panel cutting file</a><br>
+            <a href="week4PanelOutline.dxf">side panel engraving file</a><br>
+            <a href="week4OctTopOutline.dxf">top panel cutting file</a><br>
+            <a href="week4OctTopEngrave.dxf">top panel engraving file</a><br>
+            <br>
+            
+            <h2>KiCad</h2>
+            <img src="week4KiCadPanel.png" width=400>
+            <img src="week4KiCadTop.png" width=400>
+            <dd><br><p>
+                The engraving for the side panel was set as 0.5 line thickness, and the top and bottom panels engraving line thickness was 0.01 whcih allowed the inbetween material to of the thickness to be easily removed. Due to the size of some parts and the amount of side panels these were done on seperate files to allow more flexability when milling.
+            <br>
+            </dd>
+            </p>
             <h3>Source Files:</h3>
             <br>
+            <a href="week4Top.kicad_pcb">top panel file</a><br>
+            <a href="week4Panel.kicad_pcb">side panel file</a><br>
+            <a href="week4Panel-Edge_Cuts.gbr">side panel cutting file</a><br>
+            <a href="week4Panel-User_Drawings.gbr">side panel engraving file</a><br>
+            <a href="week4PCB-Edge_Cuts.gbr">top panel cutting file</a><br>
+            <a href="week4PCB-User_Drawings.gbr">top panel engraving file</a><br>
             <br>
-            <h3>Laser Cutting Settings: </h3>
-            <dd><br>
-              <h4>1: Draw a graph where the X axis is time and the Y axis is voltage across the LEDs. Draw a line for each of your 3 LEDs.</h4><br>
+            
+            <h2>Bantam</h2>
+            <img src="week4Bantum.png" width=400>
+            <dd><br><p>
+                The engravings for the side panels were done with 0.15 pass depth and the engrabing for the top and bottom panel were done with 0.7 pass depth to help secure the panels. I ended up cutting on a thicker panel than i designed for, 1.72mm thick instead of 1.35mm. Drilled using a 1mm diameter 2 flute flat end mill. On half the side panels I opted to not do engraving to save time.
+            <br>
             </dd>
-            <br>
-            <h3>Write up: </h3>
             </p>
+            <h3>engraving learing process and version 1:</h3>
+            <br>
+            <img src="week4EngravingDifferences.jpg" width=400>
+            <img src="week4sidepanelDifference.jpg" width=400>
+            <img src="week4v1.jpg" width=400>
+            <br>
+            <h3>version 2 with sugar:</h3>
+            <br>
+            <img src="week4v2.jpg" width=400>
+            <img src="week4sugar.jpg" width=400>
+            <br>
         </div>
-        
     </body>
 </html>
